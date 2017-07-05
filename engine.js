@@ -137,13 +137,15 @@ Marble.prototype.update = function () {
   if (this.ctrl._A) {
     audio.play();
     this.strike = 16}
-  if (this.z==0) {
+  chk = map.check(this.x,this.y)
+  if (this.z==0&&chk) {
     if (this.ctrl.jump) {this.zsp = 10}}
-  else if (this.z>0) {this.zsp--} 
+  else if (this.z>0||!chk) {this.zsp--} 
   this.z += this.zsp
-  if (this.z<0) {
+  if (this.z<0&&chk) {
     this.zsp=0
     this.z=0}
+  if (this.z<-100) {reset()}
   for (oc=0;oc<objects.length;oc++) {
     tgt = objects[oc]
     if (tgt!=this&&tgt.strike==16&&dist(this,tgt)<=32) {this.health-=10}}
@@ -173,6 +175,7 @@ function Camera() {
 
 function reset() {
   console.log('reset')
+  map = new Map(8,8)
   objects = []  
   marble = new Marble(new Controller())  
   objects.push(marble)
