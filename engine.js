@@ -73,9 +73,20 @@ window.addEventListener('keyup',keyup,false)
 // sounds
 var audio = new Audio('wntic.wav');
 
+function rr() {
+  return Math.floor(Math.random()*2)}
 
-
-
+function Map (w,h) {
+  this.w = w; this.h = h
+  this.mtx = []
+  for (n=0;n<this.w*this.h;n++) {
+    this.mtx.push(rr())}}
+Map.prototype.render = function () {
+  for (n=0;n<this.w*this.h;n++) {
+    ctx.fillStyle = '#222288'
+    ctx.strokeStyle = '#000000'
+    ctx.fillRect((n%this.w)*16-marble.x+W/2,Math.floor(n/this.w)*16-marble.y+H/2,16,16)
+    ctx.strokeRect((n%this.w)*16-marble.x+W/2,Math.floor(n/this.w)*16-marble.y+H/2,16,16)}}
 
 
 function Controller() {
@@ -100,14 +111,20 @@ function Marble(inputs) {
   this.ctrl = inputs
   this.x = W/2
   this.y = H/2
+  this.xsp = 0
+  this.ysp = 0
   this.z = 0
   this.zsp = 0
   this.strike = 0
   this.health = 100}
 Marble.prototype.update = function () {
   this.ctrl.update()
-  this.x += this.ctrl.move[0]*2
-  this.y += this.ctrl.move[1]*2
+  this.xsp += this.ctrl.move[0]
+  this.ysp += this.ctrl.move[1]
+  this.x += this.xsp
+  this.y += this.ysp
+  this.xsp = this.xsp/1.1
+  this.ysp = this.ysp/1.1
   if (this.strike>0) {this.strike--}
   //if (this.strike==0) {
   if (this.ctrl._A) {
@@ -131,13 +148,13 @@ Marble.prototype.update = function () {
           &&abs(objects[oc].y-this.y)<16) {}}}}
   if (this.health<=0) {this.x=0;this.y=0;reset()}}
 Marble.prototype.render = function () {
-  ctx.fillStyle = '#0000ff'
+  ctx.fillStyle = '#8888ff'
   ctx.beginPath();
-  ctx.arc(this.x,this.y-this.z,16,0,2*Math.PI);
+  ctx.arc(H/2,W/2-this.z,16,0,2*Math.PI);
   ctx.fill()
-  ctx.strokeStyle = '#0000ff'
+  ctx.strokeStyle = '#000000'
   ctx.beginPath();
-  ctx.arc(this.x,this.y-this.z,16+this.strike,0,2*Math.PI);
+  ctx.arc(H/2,W/2-this.z,16+this.strike,0,2*Math.PI);
   ctx.stroke()
 }
 
@@ -149,16 +166,18 @@ function Camera() {
 function reset() {
   console.log('reset')
   objects = []  
-  player1 = new Marble(new Controller())  
-  objects.push(player1)
+  marble = new Marble(new Controller())  
+  objects.push(marble)
   }
 
 reset()
 var t=0
+
 var camera = new Camera()
-var player1 = new Marble(new Controller())
+var marble = new Marble(new Controller())
+var map = new Map(8,8)
 var objects = []
-objects.push(player1)
+objects.push(marble)
 
 function execute () {
   function loop () {
@@ -171,17 +190,14 @@ function execute () {
     ctx.lineWidth = 2
 
     ctx.strokeStyle = '#665544'
-
+    map.render()
 
     ctx.font = "12pt courier";
     for (o=0;o<objects.length;o++) {
       objects[o].update()}
     for (o=0;o<objects.length;o++) {
       objects[o].render()}
-    ctx.fillStyle = '#00ff00'
-    ctx.strokeStyle = '#0000ff'
-    ctx.strokeRect(8,8,100,8)
-    ctx.fillRect(8,8,player1.health,8)
+    
     resetKeys()
     t++
     setTimeout(loop,30)}
