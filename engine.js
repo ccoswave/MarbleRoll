@@ -82,11 +82,12 @@ function Map (w,h) {
   for (n=0;n<this.w*this.h;n++) {
     this.mtx.push(rr())}}
 Map.prototype.render = function () {
+  tsize = 32
   for (n=0;n<this.w*this.h;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
-    ctx.fillRect((n%this.w)*16-marble.x+W/2,Math.floor(n/this.w)*16-marble.y+H/2,16,16)
-    ctx.strokeRect((n%this.w)*16-marble.x+W/2,Math.floor(n/this.w)*16-marble.y+H/2,16,16)}}
+    if (this.mtx[n]) {ctx.fillRect((n%this.w)*tsize-marble.x+W/2,Math.floor(n/this.w)*tsize-marble.y+H/2,tsize,tsize)}
+    ctx.strokeRect((n%this.w)*tsize-marble.x+W/2,Math.floor(n/this.w)*tsize-marble.y+H/2,tsize,tsize)}}
 
 
 function Controller() {
@@ -109,8 +110,8 @@ Controller.prototype.update = function () {
 function Marble(inputs) {
   this.type = 'Marble'
   this.ctrl = inputs
-  this.x = W/2
-  this.y = H/2
+  this.x = 16
+  this.y = 16
   this.xsp = 0
   this.ysp = 0
   this.z = 0
