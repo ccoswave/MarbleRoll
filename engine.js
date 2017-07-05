@@ -157,8 +157,7 @@ Marble.prototype.update = function () {
           &&abs(objects[oc].y-this.y)<16) {}}}}
   if (this.health<=0) {this.x=0;this.y=0;reset()}}
 Marble.prototype.render = function () {
-  ctx.fillStyle = '#000000'
-  if (map.check(this.x,this.y)) {ctx.fillStyle = '#8888ff'}
+  ctx.fillStyle = '#8888ff'
   ctx.beginPath();
   ctx.arc(H/2,W/2-this.z,16,0,2*Math.PI);
   ctx.fill()
@@ -201,13 +200,14 @@ function execute () {
     ctx.lineWidth = 2
 
     ctx.strokeStyle = '#665544'
+    marble.render()
     map.render()
-
+    if (marble.z>=0) {marble.render()}
     ctx.font = "12pt courier";
     for (o=0;o<objects.length;o++) {
       objects[o].update()}
-    for (o=0;o<objects.length;o++) {
-      objects[o].render()}
+    //for (o=0;o<objects.length;o++) {
+      //objects[o].render()}
     
     resetKeys()
     t++
