@@ -51,8 +51,12 @@ function keydown(evt) {
   if (evt.key == 'Shift'&&!k_A) {
     k_A = true
     k_A_down = true}
-  if (evt.key == 'z'&&!k_B) {k_B = true}
-  if (evt.key == 'x'&&!k_C) {k_C = true}
+  if (evt.key == 'z'&&!k_B) {
+    k_B = true
+    cam.spin = (cam.spin+3.5)%4}
+  if (evt.key == 'x'&&!k_C) {
+    k_C = true
+    cam.spin = (cam.spin+0.5)%4}
   if (evt.key == 'Control'&&!k_ctrl) {
     k_ctrl = true
     k_ctrl_down = true}}
@@ -92,8 +96,16 @@ Map.prototype.render = function () {
   for (n=0;n<this.w*this.h;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
-    if (this.mtx[n]) {ctx.fillRect((n%this.w)*tsize-marble.x+W/2,Math.floor(n/this.w)*tsize-marble.y+H/2,tsize,tsize)}
-    ctx.strokeRect((n%this.w)*tsize-marble.x+W/2,Math.floor(n/this.w)*tsize-marble.y+H/2,tsize,tsize)}}
+    if (this.mtx[n]) {ctx.fillRect(
+                      cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+                      sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
+                      cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
+    if (this.mtx[n]) {ctx.strokeRect(
+                      cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+                      sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
+                      cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}}}
 
 
 function Controller() {
@@ -116,8 +128,8 @@ Controller.prototype.update = function () {
 function Marble(inputs) {
   this.type = 'Marble'
   this.ctrl = inputs
-  this.x = 16
-  this.y = 16
+  this.x = 0
+  this.y = 0
   this.xsp = 0
   this.ysp = 0
   this.z = 0
@@ -126,8 +138,8 @@ function Marble(inputs) {
   this.health = 100}
 Marble.prototype.update = function () {
   this.ctrl.update()
-  this.xsp += this.ctrl.move[0]
-  this.ysp += this.ctrl.move[1]
+  this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*0.5
+  this.ysp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*0.5
   this.x += this.xsp
   this.y += this.ysp
   this.xsp = this.xsp/1.1
@@ -168,12 +180,14 @@ Marble.prototype.render = function () {
 }
 
 function Camera() {
+  this.spin = 0
   this.x = 0}
 
 
 
 function reset() {
   console.log('reset')
+  cam = new Camera()
   map = new Map(8,8)
   objects = []  
   marble = new Marble(new Controller())  
@@ -184,7 +198,7 @@ reset()
 var t=0
 
 var map = new Map(8,8)
-var camera = new Camera()
+var cam = new Camera()
 var marble = new Marble(new Controller())
 var objects = []
 objects.push(marble)
