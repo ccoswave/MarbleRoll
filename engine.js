@@ -77,12 +77,18 @@ function rr() {
   return Math.floor(Math.random()*2)}
 
 function Map (w,h) {
+  this.tsize = 32
   this.w = w; this.h = h
   this.mtx = []
   for (n=0;n<this.w*this.h;n++) {
     this.mtx.push(rr())}}
+Map.prototype.check = function (x,y) {
+  if (x<=this.w*this.tsize&&y<=this.h*this.tsize&&x>=0&&y>=0) {
+    if (this.mtx[Math.floor(x/this.tsize)+Math.floor(y/this.tsize)*this.w]) {return true} else {return false}}
+  else {
+    return false}}
 Map.prototype.render = function () {
-  tsize = 32
+  tsize = this.tsize
   for (n=0;n<this.w*this.h;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
@@ -149,7 +155,8 @@ Marble.prototype.update = function () {
           &&abs(objects[oc].y-this.y)<16) {}}}}
   if (this.health<=0) {this.x=0;this.y=0;reset()}}
 Marble.prototype.render = function () {
-  ctx.fillStyle = '#8888ff'
+  ctx.fillStyle = '#000000'
+  if (map.check(this.x,this.y)) {ctx.fillStyle = '#8888ff'}
   ctx.beginPath();
   ctx.arc(H/2,W/2-this.z,16,0,2*Math.PI);
   ctx.fill()
@@ -174,9 +181,9 @@ function reset() {
 reset()
 var t=0
 
+var map = new Map(8,8)
 var camera = new Camera()
 var marble = new Marble(new Controller())
-var map = new Map(8,8)
 var objects = []
 objects.push(marble)
 
