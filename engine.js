@@ -44,19 +44,21 @@ function resetKeys () {
 
 function keydown(evt) {
   console.log('key: ',evt.key)
-  if (evt.key == 'ArrowUp'&&!k_up) {k_up = true}
-  if (evt.key == 'ArrowDown'&&!k_down) {k_down = true}
-  if (evt.key == 'ArrowLeft'&&!k_left) {k_left = true}
-  if (evt.key == 'ArrowRight'&&!k_right) {k_right = true}
-  if (evt.key == 'Shift'&&!k_A) {
+  if (evt.key == '1') {render_mode = 0}
+  if (evt.key == '2') {render_mode = 1}
+  if (evt.key == 'ArrowUp') {k_up = true}
+  if (evt.key == 'ArrowDown') {k_down = true}
+  if (evt.key == 'ArrowLeft') {k_left = true}
+  if (evt.key == 'ArrowRight') {k_right = true}
+  if (evt.key == 'Shift') {
     k_A = true
     k_A_down = true}
   if (evt.key == 'z'&&!k_B) {
     k_B = true
-    cam.spin = (cam.spin+3.5)%4}
+    cam.spin = (cam.spin+0.5)%4}
   if (evt.key == 'x'&&!k_C) {
     k_C = true
-    cam.spin = (cam.spin+0.5)%4}
+    cam.spin = (cam.spin+3.5)%4}
   if (evt.key == 'Control'&&!k_ctrl) {
     k_ctrl = true
     k_ctrl_down = true}}
@@ -77,11 +79,23 @@ window.addEventListener('keyup',keyup,false)
 // sounds
 var audio = new Audio('wntic.wav');
 
+// images
+var isotile = new Image();
+isotile.src = "isoblock.png";
+var partile = new Image();
+partile.src = "parblock.png"
+var balltile = new Image();
+balltile.src = "ball.png"
+
+
+
 function rr() {
-  return Math.floor(Math.random()*2)}
+  rn = Math.floor(Math.random()*3.5)
+  if (rn>1) {rn=1}
+  return rn}
 
 function Map (w,h) {
-  this.tsize = 32
+  this.tsize = 23
   this.w = w; this.h = h
   this.mtx = []
   for (n=0;n<this.w*this.h;n++) {
@@ -99,13 +113,63 @@ Map.prototype.render = function () {
     if (this.mtx[n]) {ctx.fillRect(
                       cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
                       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
-                      cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
-                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
+                      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)}
     if (this.mtx[n]) {ctx.strokeRect(
                       cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
                       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
-                      cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
-                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}}}
+                      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+                      sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)}}}
+Map.prototype.render2 = function () {
+ 
+  for (n=0;n<this.w*this.h;n++) {
+    ctx.fillStyle = '#222288'
+    ctx.strokeStyle = '#000000'
+    
+    
+    if (this.mtx[n]) {
+      if ((cam.spin*2)%2==0) {
+        tsize = 24
+        xsize = 24
+        ysize = 16
+        ctx.strokeStyle = '#ffffff'
+        //ctx.strokeRect(
+   //                 cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+   //       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
+   //      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+    // sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)
+        ctx.drawImage(
+          partile,
+          0,0,    //x,y on tiles
+          33,33,  //w,h on tiles
+                   cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+         sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+W/2-tsize/2-1,
+        (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/3)+
+       sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/3))/2+H/2-tsize/4+2,    //x,y on canvas
+          33,33)}
+      else if ((cam.spin*2)%2==1) {
+        tsize = 23
+        xsize = 33
+        ysize = 15
+        ctx.drawImage(
+          isotile,
+          0,0,    //x,y on tiles
+          33,33,  //w,h on tiles
+             cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+xsize/2)-
+   sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+ysize/2)+W/2-tsize, 
+  (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+ysize/2)+
+             sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
+          33,33)}
+      }
+    //if (this.mtx[n]) {ctx.fillRect(
+    //                  cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+    //                  sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
+    //                  cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+    //                  sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
+    }}
+
+
+
 
 
 function Controller() {
@@ -128,8 +192,8 @@ Controller.prototype.update = function () {
 function Marble(inputs) {
   this.type = 'Marble'
   this.ctrl = inputs
-  this.x = 0
-  this.y = 0
+  this.x = 12
+  this.y = 12
   this.xsp = 0
   this.ysp = 0
   this.z = 0
@@ -138,8 +202,8 @@ function Marble(inputs) {
   this.health = 100}
 Marble.prototype.update = function () {
   this.ctrl.update()
-  this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*0.5
-  this.ysp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*0.5
+  this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*0.2
+  this.ysp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*0.2
   this.x += this.xsp
   this.y += this.ysp
   this.xsp = this.xsp/1.1
@@ -171,16 +235,24 @@ Marble.prototype.update = function () {
 Marble.prototype.render = function () {
   ctx.fillStyle = '#8888ff'
   ctx.beginPath();
-  ctx.arc(H/2,W/2-this.z,16,0,2*Math.PI);
+  ctx.arc(H/2,W/2-this.z-5,10,0,2*Math.PI);
   ctx.fill()
   ctx.strokeStyle = '#000000'
   ctx.beginPath();
-  ctx.arc(H/2,W/2-this.z,16+this.strike,0,2*Math.PI);
-  ctx.stroke()
-}
+  ctx.arc(H/2,W/2-this.z-5,10+this.strike,0,2*Math.PI);
+  ctx.stroke()}
+Marble.prototype.render2 = function () {
+  ctx.drawImage(
+    balltile,
+    0,0,    //x,y on tiles
+    17,17,  //w,h on tiles
+    W/2-9,H/2-14-this.z,    //x,y on canvas
+    17,17)
+  ctx.fillStyle = '#000000'}
+  //ctx.fillRect(W/2-2,H/2-2-this.z,4,4)}
 
 function Camera() {
-  this.spin = 0
+  this.spin = 0.5
   this.x = 0}
 
 
@@ -188,7 +260,7 @@ function Camera() {
 function reset() {
   console.log('reset')
   cam = new Camera()
-  map = new Map(8,8)
+  map = new Map(16,16)
   objects = []  
   marble = new Marble(new Controller())  
   objects.push(marble)
@@ -197,7 +269,8 @@ function reset() {
 reset()
 var t=0
 
-var map = new Map(8,8)
+var render_mode = 1
+var map = new Map(16,16)
 var cam = new Camera()
 var marble = new Marble(new Controller())
 var objects = []
@@ -212,18 +285,45 @@ function execute () {
     ctx.clearRect(0,0,W,H)
     ctx.strokeRect(0,0,W,H)
     ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(W/2,0)
+    ctx.lineTo(W/2,H)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(0,H/2)
+    ctx.lineTo(W,H/2)
+    ctx.stroke()
 
     ctx.strokeStyle = '#665544'
-    marble.render()
-    map.render()
-    if (marble.z>=0) {marble.render()}
     ctx.font = "12pt courier";
     for (o=0;o<objects.length;o++) {
       objects[o].update()}
+
+
+    if (render_mode==0) {
+      marble.render()
+      map.render()
+      if (marble.z>=0) {marble.render()}
+      
+      }
+    else if (render_mode==1) {
+      //cam.spin = 0.5
+
+      map.render2()
+      marble.render2()
+      //map.render()
+      //ctx.drawImage(
+      //  tile,
+      //  0,0,    //x,y on tiles
+      //  33,33,  //w,h on tiles
+      //  16,16,    //x,y on canvas
+      //  33,33)
+    }
     //for (o=0;o<objects.length;o++) {
       //objects[o].render()}
-    
+
     resetKeys()
+
     t++
     setTimeout(loop,30)}
   loop()
