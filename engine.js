@@ -178,14 +178,16 @@ Map.prototype.render2 = function () {
           (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-marble.y+ysize/2)+yshift+
                      sin(cam.spin*pi/2)*((npos%this.w)*tsize-marble.x+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
           33,33)}
-      if (marble.z<0&&marble.x+marble.y) {}
       }
+    if (Math.floor(marble.x/24)%this.w+
+        Math.floor(marble.y/24)*this.w ==n&&marble.z<0) {marble.render2()}
     //if (this.mtx[n]) {ctx.fillRect(
     //                  cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
     //                  sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
     //                  cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
     //                  sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
-    }}
+    }
+    if (marble.z>=0) {marble.render2()}}
 
 
 
@@ -281,7 +283,7 @@ function update_renderlist () {
 function reset() {
   console.log('reset')
   cam = new Camera()
-  map = new Map(8,8)
+  map = new Map(64,64)
   objects = []  
   marble = new Marble(new Controller())  
   objects.push(marble)
@@ -332,7 +334,7 @@ function execute () {
       //cam.spin = 0.5
       
       map.render2()
-      marble.render2()
+      //marble.render2()
       //map.render()
       //ctx.drawImage(
       //  tile,
