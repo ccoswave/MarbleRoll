@@ -95,7 +95,7 @@ function rr() {
   return rn}
 
 function Map (w,h) {
-  this.tsize = 23
+  this.tsize = 24
   this.w = w; this.h = h
   this.mtx = []
   for (n=0;n<this.w*this.h;n++) {
@@ -121,31 +121,49 @@ Map.prototype.render = function () {
                       (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
                       sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)}}}
 Map.prototype.render2 = function () {
- 
   for (n=0;n<this.w*this.h;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
+    y = floor(n/this.w)*this.w
+    xshift = 0
+    yshift = 0
+    if (cam.spin<=1) {
+      npos = n
+    } else if (cam.spin<2) {
+      npos = map.mtx.length-y+(n-y)
+      xshift = 23
+      yshift = 10
+    } else if (cam.spin<3) {
+      npos = map.mtx.length-n-1
+      if (cam.spin%1==0.5) {
+        xshift = 13} else {yshift = -8}
+    } else if (cam.spin<4) {
+      npos = y+this.w-(n-y)-1
+      yshift = -8
+      if (cam.spin%1==0.5) {
+        xshift = 6
+        yshift = 4}
+    } else {npos = n}
     
-    
-    if (this.mtx[n]) {
+    if (this.mtx[npos]) {
       if ((cam.spin*2)%2==0) {
         tsize = 24
         xsize = 24
         ysize = 16
         ctx.strokeStyle = '#ffffff'
         //ctx.strokeRect(
-   //                 cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
-   //       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
-   //      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
-    // sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)
+         //                 cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
+         //       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
+         //      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
+          // sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)
         ctx.drawImage(
           partile,
           0,0,    //x,y on tiles
           33,33,  //w,h on tiles
-                   cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
-         sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+W/2-tsize/2-1,
-        (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/3)+
-       sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/3))/2+H/2-tsize/4+2,    //x,y on canvas
+                     cos(cam.spin*pi/2)*((npos%this.w)*tsize-marble.x+tsize/2)+xshift-
+           sin(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-marble.y+tsize/2)+W/2-tsize/2-1,
+          (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-marble.y+tsize/3)+yshift+
+                     sin(cam.spin*pi/2)*((npos%this.w)*tsize-marble.x+tsize/3))/2+H/2-tsize/4+2,    //x,y on canvas
           33,33)}
       else if ((cam.spin*2)%2==1) {
         tsize = 23
@@ -155,11 +173,12 @@ Map.prototype.render2 = function () {
           isotile,
           0,0,    //x,y on tiles
           33,33,  //w,h on tiles
-             cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+xsize/2)-
-   sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+ysize/2)+W/2-tsize, 
-  (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+ysize/2)+
-             sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
+                     cos(cam.spin*pi/2)*((npos%this.w)*tsize-marble.x+xsize/2)+xshift-
+           sin(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-marble.y+ysize/2)+W/2-tsize, 
+          (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-marble.y+ysize/2)+yshift+
+                     sin(cam.spin*pi/2)*((npos%this.w)*tsize-marble.x+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
           33,33)}
+      if (marble.z<0&&marble.x+marble.y) {}
       }
     //if (this.mtx[n]) {ctx.fillRect(
     //                  cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
@@ -192,8 +211,8 @@ Controller.prototype.update = function () {
 function Marble(inputs) {
   this.type = 'Marble'
   this.ctrl = inputs
-  this.x = 12
-  this.y = 12
+  this.x = 12//map.tsize*map.w-12
+  this.y = 12//map.tsize*map.h-12
   this.xsp = 0
   this.ysp = 0
   this.z = 0
@@ -202,8 +221,8 @@ function Marble(inputs) {
   this.health = 100}
 Marble.prototype.update = function () {
   this.ctrl.update()
-  this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*0.2
-  this.ysp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*0.2
+  this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*0.5
+  this.ysp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*0.5
   this.x += this.xsp
   this.y += this.ysp
   this.xsp = this.xsp/1.1
@@ -252,15 +271,17 @@ Marble.prototype.render2 = function () {
   //ctx.fillRect(W/2-2,H/2-2-this.z,4,4)}
 
 function Camera() {
-  this.spin = 0.5
+  this.spin = 0
   this.x = 0}
+function update_renderlist () {
+  }
 
 
 
 function reset() {
   console.log('reset')
   cam = new Camera()
-  map = new Map(16,16)
+  map = new Map(8,8)
   objects = []  
   marble = new Marble(new Controller())  
   objects.push(marble)
@@ -269,8 +290,9 @@ function reset() {
 reset()
 var t=0
 
+var renderlist = []
 var render_mode = 1
-var map = new Map(16,16)
+var map = new Map(8,8)
 var cam = new Camera()
 var marble = new Marble(new Controller())
 var objects = []
@@ -293,6 +315,8 @@ function execute () {
     ctx.moveTo(0,H/2)
     ctx.lineTo(W,H/2)
     ctx.stroke()
+    ctx.fillStyle = '#ffffff'
+    ctx.fillText(cam.spin.toString(),16,16)
 
     ctx.strokeStyle = '#665544'
     ctx.font = "12pt courier";
@@ -303,12 +327,10 @@ function execute () {
     if (render_mode==0) {
       marble.render()
       map.render()
-      if (marble.z>=0) {marble.render()}
-      
-      }
+      if (marble.z>=0) {marble.render()}}
     else if (render_mode==1) {
       //cam.spin = 0.5
-
+      
       map.render2()
       marble.render2()
       //map.render()
@@ -321,7 +343,15 @@ function execute () {
     }
     //for (o=0;o<objects.length;o++) {
       //objects[o].render()}
-
+    ctx.strokeStyle = '#ffffff'
+    ctx.lineWidth = 0.5
+    ctx.moveTo(W/2,0)
+    ctx.lineTo(W/2,H)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(0,H/2)
+    ctx.lineTo(W,H/2)
+    ctx.stroke()
     resetKeys()
 
     t++
