@@ -8,7 +8,96 @@ function level_random_large() {
 }
 
 
+function level_0() {
+  mtx = [1,1,1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1]
+  console.log('reset')
+  cam = new Camera()
+  cam.spin = 2.5
+  map = new Map(12,4)
+  map.mtx = mtx
+  objects = []  
+  marble = new Marble(32,32,new Controller())
+  goal = new Goal(11,3)  
+  objects.push(marble)}
+
 function level_1() {
+  mtx = [1,1,1,1,1,1,0,0,0,0,
+         1,1,1,1,1,1,1,0,0,0,
+         1,1,1,0,0,1,1,0,0,0,
+         1,1,0,0,0,1,1,1,1,0,
+         1,1,0,0,0,1,1,1,1,1,
+         1,1,1,1,1,0,0,0,1,1,
+         0,1,1,1,1,0,0,0,1,1,
+         0,0,0,1,1,0,0,1,1,1,
+         0,0,0,1,1,1,1,1,1,1,
+         0,0,0,0,1,1,1,1,1,1,]
+  console.log('reset')
+  cam = new Camera()
+  cam.spin = 2.5
+  map = new Map(10,10)
+  map.mtx = mtx
+  objects = []  
+  marble = new Marble(32,32,new Controller())
+  goal = new Goal(8,8)  
+  objects.push(marble)}
+
+function level_2() {
+  mtx = [1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         0,0,0,0,0,0,0,0,1,1,
+         0,0,0,0,0,0,0,0,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,0,0,0,0,0,0,0,0,
+         1,1,0,0,0,0,0,0,0,0,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         0,0,0,0,0,0,0,1,1,1]
+  console.log('reset')
+  cam = new Camera()
+  cam.spin = 2.5
+  map = new Map(10,11)
+  map.mtx = mtx
+  objects = []  
+  marble = new Marble(64,64,new Controller())
+  goal = new Goal(8,9)  
+  objects.push(marble)}
+
+function level_3() {
+  mtx = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+         1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,
+         1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,1,1,1,1,1,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,1,1,1,1,1,1,1,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,
+         1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+         1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+         1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+         1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+  console.log('reset')
+  cam = new Camera()
+  cam.spin = 2.5
+  map = new Map(23,21)
+  map.mtx = mtx
+  objects = []  
+  marble = new Marble(64*22,64,new Controller())
+  goal = new Goal(9,9)  
+  objects.push(marble)}
+function level_7() {
   mtx = [1,1,0,0,0,0,0,0,
          1,1,1,1,1,1,0,0,
          0,0,0,0,0,0,0,0,
@@ -115,6 +204,8 @@ window.addEventListener('keyup',keyup,false)
 var audio = new Audio('wntic.wav');
 
 // images
+var img_goal = new Image();
+img_goal.src = "goal.png";
 var isotile = new Image();
 isotile.src = "isoblock.png";
 var partile = new Image();
@@ -219,16 +310,22 @@ Map.prototype.render2 = function () {
           (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-(tsize*marble.y/rgrid)+ysize/2)+yshift+
                      sin(cam.spin*pi/2)*((npos%this.w)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
           33,33)}
+      if (n==goal.h+goal.v*map.w) {goal.render()}
       }
-    if (Math.floor(marble.x/rgrid)%this.w+
-        Math.floor(marble.y/rgrid)*this.w ==n&&marble.z<0) {marble.render2()}
+    
     //if (this.mtx[n]) {ctx.fillRect(
     //                  cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
     //                  sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+(W-tsize)/2,
     //                  cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.y+tsize/2)+
     //                  sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
     }
-    if (marble.z>=-0.1) {marble.render2()}}
+    //if (Math.floor(marble.x/rgrid)%this.w+
+    //    Math.floor(marble.y/rgrid)*this.w ==n&&marble.z<0) {
+      
+    //}
+    goal.render()
+      if (marble.z>=-0.1) {marble.render2()}
+  }
 
 
 
@@ -250,6 +347,66 @@ Controller.prototype.update = function () {
   if (k_A_down) {this._A = 1}
   }
 
+function Goal(h,v) {
+  this.h = h
+  this.v = v}
+Goal.prototype.render = function() {
+  rgrid = 64
+  ctx.fillStyle = '#222288'
+  ctx.strokeStyle = '#000000'
+  y = floor(n/map.w)*map.w
+  xshift = 0
+  yshift = 0
+  if (cam.spin<=1) {
+  } else if (cam.spin<=1.5) {
+    xshift = 7
+    yshift = -6
+  } else if (cam.spin<2) {
+    xshift = 23
+    yshift = 10
+  } else if (cam.spin<3) {
+    if (cam.spin%1==0.5) {
+      xshift = 13} else {yshift = -8}
+  } else if (cam.spin<4) {
+    yshift = -8
+    if (cam.spin%1==0.5) {
+      xshift = 6
+      yshift = 4}
+  } else {npos = n}
+  
+  //if (1) {
+    //ctx.fillRect(0,0,32,32)
+  if ((cam.spin*2)%2==0) {
+    tsize = 24
+    xsize = 24
+    ysize = 16
+    ctx.strokeStyle = '#ffffff'
+    ctx.drawImage(
+      img_goal,
+      (t%2)*33,0,    //x,y on tiles
+      33,33,  //w,h on tiles
+                 cos(cam.spin*pi/2)*((this.h)*tsize-(tsize*marble.x/rgrid)+tsize/2)-4+xshift-
+       sin(cam.spin*pi/2)*(Math.floor(this.v)*tsize-(tsize*marble.y/rgrid)+tsize/2)+W/2-tsize/2-1,
+      (cos(cam.spin*pi/2)*(Math.floor(this.v)*tsize-(tsize*marble.y/rgrid)+tsize/3)-4+yshift+
+                 sin(cam.spin*pi/2)*((this.h)*tsize-(tsize*marble.x/rgrid)+tsize/3))/2+H/2-tsize/4+2,    //x,y on canvas
+      33,33)}
+  else if ((cam.spin*2)%2==1) {
+    tsize = 23
+    xsize = 33
+    ysize = 15
+      ctx.drawImage(
+        img_goal,
+        (t%2)*33,0,    //x,y on tiles
+        33,33,  //w,h on tiles
+                   cos(cam.spin*pi/2)*((this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2)+xshift-
+         sin(cam.spin*pi/2)*(Math.floor(this.v)*tsize-(tsize*marble.y/rgrid)+ysize/2)+W/2-tsize, 
+        (cos(cam.spin*pi/2)*(Math.floor(this.v)*tsize-(tsize*marble.y/rgrid)+ysize/2)+yshift+
+                   sin(cam.spin*pi/2)*((this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
+        33,33)
+   
+    }
+    
+    }
 
 function Marble(x,y,inputs) {
   this.type = 'Marble'
@@ -290,13 +447,14 @@ Marble.prototype.update = function () {
   for (oc=0;oc<objects.length;oc++) {
     tgt = objects[oc]
     if (tgt!=this&&tgt.strike==16&&dist(this,tgt)<=32) {this.health-=10}}
-  
   for (oc=0;oc<objects.length;oc++) {
     if (objects[oc]!=this) {
       if (objects[oc].type=='drone') {
         if (abs(objects[oc].x-this.x)<16
           &&abs(objects[oc].y-this.y)<16) {}}}}
-  if (this.health<=0) {this.x=0;this.y=0;reset()}}
+  if (floor(this.x/64)==goal.h&&floor(this.y/64)==goal.v) {
+    level++
+    reload()}}
 Marble.prototype.render = function () {
   ctx.fillStyle = '#8888ff'
   ctx.beginPath();
@@ -316,6 +474,8 @@ Marble.prototype.render2 = function () {
   ctx.fillStyle = '#000000'}
   //ctx.fillRect(W/2-2,H/2-2-this.z,4,4)}
 
+
+
 function Camera() {
   this.spin = 0.5
   this.x = 0}
@@ -333,8 +493,14 @@ function reset() {
   objects.push(marble)}
 
 function reload() {
-  if (level = 0) {level_1()} 
-  else if (level = 1) {level_1()}
+       if (level == 0) {level_0()} 
+  else if (level == 1) {level_1()}
+  else if (level == 2) {level_2()}
+  else if (level == 3) {level_3()}
+  else if (level == 4) {level_4()}
+  else if (level == 5) {level_5()}
+  else if (level == 6) {level_6()}
+  else if (level == 7) {level_7()}
 }
 
 reset()
@@ -349,7 +515,7 @@ var marble = new Marble(32,32,controller)
 var objects = []
 objects.push(marble)
 
-level_1()
+level_0()
 
 function execute () {
   function loop () {
@@ -384,8 +550,10 @@ function execute () {
       if (marble.z>=0) {marble.render()}}
     else if (render_mode==1) {
       //cam.spin = 0.5
-      
+
       map.render2()
+      
+    
       //marble.render2()
       //map.render()
       //ctx.drawImage(
@@ -406,6 +574,7 @@ function execute () {
     //ctx.moveTo(0,H/2)
     //ctx.lineTo(W,H/2)
     //ctx.stroke()
+    
     resetKeys()
 
     t++
