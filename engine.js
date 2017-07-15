@@ -227,9 +227,9 @@ function Map (w,h) {
   this.mtx = []
   for (n=0;n<this.w*this.h;n++) {
     this.mtx.push(rr())}}
-Map.prototype.check = function (x,y) {
-  if (x<=this.w*this.rgrid&&y<=this.h*this.rgrid&&x>=0&&y>=0) {
-    if (this.mtx[Math.floor(x/this.rgrid)+Math.floor(y/this.rgrid)*this.w]) {return true} else {return false}}
+Map.prototype.check = function (x,y,z) {
+  if (x<=this.w*this.rgrid&&z<=this.h*this.rgrid&&x>=0&&z>=0) {
+    if (this.mtx[Math.floor(x/this.rgrid)+Math.floor(z/this.rgrid)*this.w]&&y<0) {return true} else {return false}}
   else {
     return false}}
 Map.prototype.render = function () {
@@ -252,17 +252,17 @@ Map.prototype.render2 = function () {
   for (n=0;n<this.w*this.h;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
-    y = floor(n/this.w)*this.w
+    z = floor(n/this.w)*this.w
     xshift = 0
     zshift = 0
     if (cam.spin<=1) {
       npos = n
     } else if (cam.spin<=1.5) {
-      npos = map.mtx.length-2*y+n-this.w
+      npos = map.mtx.length-2*z+n-this.w
       xshift = 7
       zshift = -6
     } else if (cam.spin<2) {
-      npos = map.mtx.length-2*y+n
+      npos = map.mtx.length-2*z+n
       xshift = 23
       zshift = 10
     } else if (cam.spin<3) {
@@ -270,7 +270,7 @@ Map.prototype.render2 = function () {
       if (cam.spin%1==0.5) {
         xshift = 13} else {zshift = -8}
     } else if (cam.spin<4) {
-      npos = y+this.w-(n-y)-1
+      npos = z+this.w-(n-z)-1
       zshift = -8
       if (cam.spin%1==0.5) {
         xshift = 6
@@ -408,14 +408,14 @@ Goal.prototype.render = function() {
     
     }
 
-function Marble(x,y,inputs) {
+function Marble(x,z,inputs) {
   this.type = 'Marble'
   this.ctrl = inputs
   this.x = x//map.tsize*map.w-12
-  this.z = y//map.tsize*map.h-12
+  this.z = z//map.tsize*map.h-12
   this.xsp = 0
   this.zsp = 0
-  this.y = 0
+  this.y = 10
   this.ysp = 0
   this.strike = 0
   this.health = 100}
@@ -423,26 +423,40 @@ Marble.prototype.update = function () {
   this.ctrl.update()
   this.xsp += (cos(cam.spin*pi/2)*this.ctrl.move[0] + sin(cam.spin*pi/2)*this.ctrl.move[1])*1.5
   this.zsp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*1.5
-  this.x += this.xsp
-  this.z += this.zsp
+  
+  if (map.check(this.x,this.y-1,this.z)&&!map.check(this.x,this.y,this.z)) {
+    if (this.ctrl.jump) {this.ysp = 6}} // jump
+  else { // fall
+    this.ysp--} 
   this.xsp = this.xsp/1.1
   this.zsp = this.zsp/1.1
-  if (this.strike>0) {this.strike--}
-  //if (this.strike==0) {
-  if (this.ctrl._A) {
-    audio.play();
-    this.strike = 16}
-  chk = map.check(this.x,this.z)
-  if (this.y==0&&chk) {
-    if (this.ctrl.jump) {this.ysp = 6}}
-  else if (this.y>0||!chk) {this.ysp--} 
-  if (0<this.y&&this.y&&this.y+this.ysp<0) {
-    this.y = 0
-    this.ysp = 0
-  } else {this.y += this.ysp}
-  if (-10<this.y&&this.y<0&&chk) {
-    this.ysp=0
-    this.y=0}
+
+  this.xc=0; this.yc=0; this.zc=0//collision correction 
+  if (map.check(this.x+this.xsp,this.y,this.z)) {
+    this.xc=this.xsp
+    while (map.check(this.x+this.xc,this.y,this.z)) {
+      if (this.xsp>0) {this.xc--} else if (this.xsp<0) {this.xc++}}
+    this.xsp=0}
+  if (map.check(this.x,this.y+this.ysp,this.z)) {
+    this.yc+=this.ysp
+    while (map.check(this.x,this.y+this.yc,this.z)) {
+      if (this.ysp>0) {this.yc--} else if (this.ysp<0) {this.yc++}}
+    this.ysp=0}
+  if (map.check(this.x,this.y+this.ysp,this.z)) {
+    this.zc+=this.zsp
+    while (map.check(this.x,this.y,this.z+this.zc)) {
+      if (this.zsp>0) {this.zc--} else if (this.zsp<0) {this.zc++}}
+    this.zsp=0}
+  this.x+=this.xc
+  this.z+=this.zc
+  this.y+=this.yc
+
+  
+  this.y += this.ysp
+  this.x += this.xsp
+  this.z += this.zsp
+
+  // respawn after falling
   if (this.y<-100) {reload()}
 
   // next level at goal
@@ -569,7 +583,9 @@ function execute () {
     //ctx.moveTo(0,H/2)
     //ctx.lineTo(W,H/2)
     //ctx.stroke()
-    
+    ctx.fillStyle = '#ffffff'
+    ctx.font = "12pt courier";
+    ctx.fillText(marble.y,32,16)
     resetKeys()
 
     t++
