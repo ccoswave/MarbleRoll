@@ -444,14 +444,6 @@ Marble.prototype.update = function () {
     this.zsp=0
     this.z=0}
   if (this.z<-100) {reload()}
-  for (oc=0;oc<objects.length;oc++) {
-    tgt = objects[oc]
-    if (tgt!=this&&tgt.strike==16&&dist(this,tgt)<=32) {this.health-=10}}
-  for (oc=0;oc<objects.length;oc++) {
-    if (objects[oc]!=this) {
-      if (objects[oc].type=='drone') {
-        if (abs(objects[oc].x-this.x)<16
-          &&abs(objects[oc].y-this.y)<16) {}}}}
   if (floor(this.x/64)==goal.h&&floor(this.y/64)==goal.v) {
     level++
     reload()}}
