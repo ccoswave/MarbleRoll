@@ -320,11 +320,11 @@ Map.prototype.render2 = function () {
     //                  sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
     }
     //if (Math.floor(marble.x/rgrid)%this.w+
-    //    Math.floor(marble.z/rgrid)*this.w ==n&&marble.uptemp<0) {
+    //    Math.floor(marble.z/rgrid)*this.w ==n&&marble.y<0) {
       
     //}
     goal.render()
-      if (marble.uptemp>=-0.1) {marble.render2()}
+      if (marble.y>=-0.1) {marble.render2()}
   }
 
 
@@ -415,8 +415,8 @@ function Marble(x,y,inputs) {
   this.z = y//map.tsize*map.h-12
   this.xsp = 0
   this.zsp = 0
-  this.uptemp = 0
-  this.uptempsp = 0
+  this.y = 0
+  this.ysp = 0
   this.strike = 0
   this.health = 100}
 Marble.prototype.update = function () {
@@ -433,38 +433,41 @@ Marble.prototype.update = function () {
     audio.play();
     this.strike = 16}
   chk = map.check(this.x,this.z)
-  if (this.uptemp==0&&chk) {
-    if (this.ctrl.jump) {this.uptempsp = 6}}
-  else if (this.uptemp>0||!chk) {this.uptempsp--} 
-  if (0<this.uptemp&&this.uptemp&&this.uptemp+this.uptempsp<0) {
-    this.uptemp = 0
-    this.uptempsp = 0
-  } else {this.uptemp += this.uptempsp}
-  if (-10<this.uptemp&&this.uptemp<0&&chk) {
-    this.uptempsp=0
-    this.uptemp=0}
-  if (this.uptemp<-100) {reload()}
+  if (this.y==0&&chk) {
+    if (this.ctrl.jump) {this.ysp = 6}}
+  else if (this.y>0||!chk) {this.ysp--} 
+  if (0<this.y&&this.y&&this.y+this.ysp<0) {
+    this.y = 0
+    this.ysp = 0
+  } else {this.y += this.ysp}
+  if (-10<this.y&&this.y<0&&chk) {
+    this.ysp=0
+    this.y=0}
+  if (this.y<-100) {reload()}
+
+  // next level at goal
   if (floor(this.x/64)==goal.h&&floor(this.z/64)==goal.v) {
     level++
-    reload()}}
+    reload()
+  }}
 Marble.prototype.render = function () {
   ctx.fillStyle = '#8888ff'
   ctx.beginPath();
-  ctx.arc(H/2,W/2-this.uptemp-5,10,0,2*Math.PI);
+  ctx.arc(H/2,W/2-this.y-5,10,0,2*Math.PI);
   ctx.fill()
   ctx.strokeStyle = '#000000'
   ctx.beginPath();
-  ctx.arc(H/2,W/2-this.uptemp-5,10+this.strike,0,2*Math.PI);
+  ctx.arc(H/2,W/2-this.y-5,10+this.strike,0,2*Math.PI);
   ctx.stroke()}
 Marble.prototype.render2 = function () {
   ctx.drawImage(
     balltile,
     0,0,    //x,y on tiles
     17,17,  //w,h on tiles
-    W/2-9,H/2-14-this.uptemp,    //x,y on canvas
+    W/2-9,H/2-14-this.y,    //x,y on canvas
     17,17)
   ctx.fillStyle = '#000000'}
-  //ctx.fillRect(W/2-2,H/2-2-this.uptemp,4,4)}
+  //ctx.fillRect(W/2-2,H/2-2-this.y,4,4)}
 
 
 
@@ -539,7 +542,7 @@ function execute () {
     if (render_mode==0) {
       marble.render()
       map.render()
-      if (marble.uptemp>=0) {marble.render()}}
+      if (marble.y>=0) {marble.render()}}
     else if (render_mode==1) {
       //cam.spin = 0.5
 
