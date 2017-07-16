@@ -1,7 +1,7 @@
 function level_random_large() {
   console.log('reset')
   cam = new Camera()
-  map = new Map(64,64)
+  map = new Map(64,64,1)
   objects = []  
   marble = new Marble(32,32,new Controller())  
   objects.push(marble)
@@ -16,7 +16,7 @@ function level_0() {
   console.log('reset')
   cam = new Camera()
   cam.spin = 2.5
-  map = new Map(12,4)
+  map = new Map(12,4,1)
   map.mtx = mtx
   objects = []  
   marble = new Marble(32,32,new Controller())
@@ -37,7 +37,7 @@ function level_1() {
   console.log('reset')
   cam = new Camera()
   cam.spin = 2.5
-  map = new Map(10,10)
+  map = new Map(10,10,1)
   map.mtx = mtx
   objects = []  
   marble = new Marble(32,32,new Controller())
@@ -59,7 +59,7 @@ function level_2() {
   console.log('reset')
   cam = new Camera()
   cam.spin = 2.5
-  map = new Map(10,11)
+  map = new Map(10,11,1)
   map.mtx = mtx
   objects = []  
   marble = new Marble(64,64,new Controller())
@@ -91,12 +91,13 @@ function level_3() {
   console.log('reset')
   cam = new Camera()
   cam.spin = 2.5
-  map = new Map(23,21)
+  map = new Map(23,21,1)
   map.mtx = mtx
   objects = []  
   marble = new Marble(64*22,64,new Controller())
   goal = new Goal(9,9)  
   objects.push(marble)}
+
 function level_7() {
   mtx = [1,1,0,0,0,0,0,0,
          1,1,1,1,1,1,0,0,
@@ -111,7 +112,7 @@ function level_7() {
   console.log('reset')
   cam = new Camera()
   cam.spin = 2.5
-  map = new Map(8,10)
+  map = new Map(8,10,1)
   map.mtx = mtx
   objects = []  
   marble = new Marble(64+32,64+32,new Controller())  
@@ -220,12 +221,12 @@ function rr() {
   if (rn>1) {rn=1}
   return rn}
 
-function Map (w,h) {
+function Map (w,h,d) {
   this.rgrid = 64
   this.tsize = 24
-  this.w = w; this.h = h
+  this.w = w; this.h = h; this.d = d
   this.mtx = []
-  for (n=0;n<this.w*this.h;n++) {
+  for (n=0;n<this.w*this.h*this.d;n++) {
     this.mtx.push(rr())}}
 Map.prototype.check = function (x,y,z) {
   if (x<=this.w*this.rgrid&&z<=this.h*this.rgrid&&x>=0&&z>=0) {
@@ -494,7 +495,7 @@ function update_renderlist () {
 function reset() {
   console.log('xxxreset')
   cam = new Camera()
-  map = new Map(16,16)
+  map = new Map(16,16,1)
   objects = []  
   marble = new Marble(32,32,new Controller())  
   objects.push(marble)}
@@ -516,7 +517,7 @@ var level = 0
 var controller = new Controller()
 var renderlist = []
 var render_mode = 1
-var map = new Map(8,8)
+var map = new Map(8,8,1)
 var cam = new Camera()
 var marble = new Marble(32,32,controller)
 var objects = []
