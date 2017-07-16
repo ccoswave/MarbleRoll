@@ -431,22 +431,22 @@ Marble.prototype.update = function () {
   this.xsp = this.xsp/1.1
   this.zsp = this.zsp/1.1
 
-  this.xc=0; this.yc=0; this.zc=0//collision correction // likely replace this method with something vector based
-  if (map.check(this.x+this.xsp,this.y,this.z)) {
+  this.xc=0; this.yc=0; this.zc=0//collision correction
     this.xc=this.xsp
-    while (map.check(this.x+this.xc,this.y,this.z)) {
-      if (this.xsp>0) {this.xc--} else if (this.xsp<0) {this.xc++}}
-    this.xsp=0}
-  if (map.check(this.x,this.y+this.ysp,this.z)) {
-    this.yc+=this.ysp
-    while (map.check(this.x,this.y+this.yc,this.z)) {
-      if (this.ysp>0) {this.yc--} else if (this.ysp<0) {this.yc++}}
-    this.ysp=0}
-  if (map.check(this.x,this.y+this.ysp,this.z)) {
-    this.zc+=this.zsp
-    while (map.check(this.x,this.y,this.z+this.zc)) {
-      if (this.zsp>0) {this.zc--} else if (this.zsp<0) {this.zc++}}
-    this.zsp=0}
+    this.yc=this.ysp
+    this.zc=this.zsp
+    abs = sqrt(pow(this.xc,2)+pow(this.yc,2)+pow(this.zc,2))
+    nrmx = this.xc/abs
+    nrmy = this.yc/abs
+    nrmz = this.zc/abs
+    while (map.check(this.x+this.xc,this.y+this.yc,this.z+this.zc)) {
+      this.xc-=nrmx
+      this.yc-=nrmy
+      this.zc-=nrmz
+    if (map.check(this.x+this.xsp,this.y,this.z)) {this.xsp=0}
+    if (map.check(this.x,this.y+this.ysp,this.z)) {this.ysp=0}
+    if (map.check(this.x,this.y,this.z+this.zsp)) {this.zsp=0}}}
+
   this.x+=this.xc
   this.z+=this.zc
   this.y+=this.yc
