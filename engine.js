@@ -432,6 +432,7 @@ Marble.prototype.update = function () {
   this.zsp = this.zsp/1.1
 
   this.xc=0; this.yc=0; this.zc=0//collision correction
+  if (map.check(this.x+this.xsp,this.y+this.ysp,this.z+this.zsp)) {
     this.xc=this.xsp
     this.yc=this.ysp
     this.zc=this.zsp
@@ -442,18 +443,16 @@ Marble.prototype.update = function () {
     while (map.check(this.x+this.xc,this.y+this.yc,this.z+this.zc)) {
       this.xc-=nrmx
       this.yc-=nrmy
-      this.zc-=nrmz
+      this.zc-=nrmz}
     if (map.check(this.x+this.xsp,this.y,this.z)) {this.xsp=0}
     if (map.check(this.x,this.y+this.ysp,this.z)) {this.ysp=0}
-    if (map.check(this.x,this.y,this.z+this.zsp)) {this.zsp=0}}}
-
+    if (map.check(this.x,this.y,this.z+this.zsp)) {this.zsp=0}}
   this.x+=this.xc
-  this.z+=this.zc
   this.y+=this.yc
+  this.z+=this.zc
 
-  
-  this.y += this.ysp
   this.x += this.xsp
+  this.y += this.ysp
   this.z += this.zsp
 
   // respawn after falling
@@ -462,8 +461,7 @@ Marble.prototype.update = function () {
   // next level at goal
   if (floor(this.x/64)==goal.h&&floor(this.z/64)==goal.v) {
     level++
-    reload()
-  }}
+    reload()}}
 Marble.prototype.render = function () {
   ctx.fillStyle = '#8888ff'
   ctx.beginPath();
