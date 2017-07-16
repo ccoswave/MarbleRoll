@@ -4,6 +4,17 @@ function level_random_large() {
   map = new Map(64,64,1)
   objects = []  
   marble = new Marble(32,32,new Controller())  
+  goal = new Goal(11,3) 
+  objects.push(marble)
+}
+
+function level_random_small() {
+  console.log('reset')
+  cam = new Camera()
+  map = new Map(12,12,4)
+  objects = []  
+  marble = new Marble(32,32,new Controller())  
+  goal = new Goal(11,3) 
   objects.push(marble)
 }
 
@@ -250,80 +261,82 @@ Map.prototype.render = function () {
                       sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)}}}
 Map.prototype.render2 = function () {
   rgrid = this.rgrid
-  for (n=0;n<this.w*this.h;n++) {
+  for (n=0;n<this.w*this.h*this.d;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
     z = floor(n/this.w)*this.w
+    flsq = this.h*this.w
+    elev = floor(n/(flsq))
+      
     xshift = 0
     zshift = 0
+    function convert (num) {
+      return num }
     if (cam.spin<=1) {
+      elev = floor(n/flsq)
       npos = n
     } else if (cam.spin<=1.5) {
-      npos = map.mtx.length-2*z+n-this.w
-      xshift = 7
-      zshift = -6
+      //elev = this.d-floor(n/flsq)-1
+      npos = (map.mtx.length-2*z+n-this.w)
+        
+        npos = npos - flsq*(this.d-1) + (2*flsq*(this.d-floor(npos/flsq)-1))
+
+      xshift = 7;zshift = -6
     } else if (cam.spin<2) {
-      npos = map.mtx.length-2*z+n
-      xshift = 23
-      zshift = 10
+      npos = (map.mtx.length-2*z+n)
+      xshift = 23;zshift = 10
     } else if (cam.spin<3) {
-      npos = map.mtx.length-n-1
+      npos = (map.mtx.length-n-1)
+
+        npos = npos - flsq*(this.d-1) + (2*flsq*(this.d-floor(npos/flsq)-1))
+
       if (cam.spin%1==0.5) {
         xshift = 13} else {zshift = -8}
     } else if (cam.spin<4) {
-      npos = z+this.w-(n-z)-1
+      npos = (z+this.w-(n-z)-1)
       zshift = -8
       if (cam.spin%1==0.5) {
-        xshift = 6
-        zshift = 4}
+        xshift = 6;zshift = 4}
     } else {npos = n}
-    
+    npos = convert(npos)
     if (this.mtx[npos]) {
       if ((cam.spin*2)%2==0) {
         tsize = 24
         xsize = 24
         zsize = 16
         ctx.strokeStyle = '#ffffff'
-        //ctx.strokeRect(
-         //                 cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
-         //       sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.z+tsize/2)+(W-tsize)/2,
-         //      (cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.z+tsize/2)+
-          // sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)
         ctx.drawImage(
           partile,
           0,0,    //x,y on tiles
           33,33,  //w,h on tiles
-                     cos(cam.spin*pi/2)*((npos%this.w)*tsize-(tsize*marble.x/rgrid)+tsize/2)+xshift-
-           sin(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-(tsize*marble.z/rgrid)+tsize/2)+W/2-tsize/2-1,
-          (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-(tsize*marble.z/rgrid)+tsize/3)+zshift+
-                     sin(cam.spin*pi/2)*((npos%this.w)*tsize-(tsize*marble.x/rgrid)+tsize/3))/2+H/2-tsize/4+2,    //x,y on canvas
+                     cos(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+tsize/2)+xshift-
+           sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+tsize/2)+W/2-tsize/2-1,
+          (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+tsize/3)+zshift+
+                     sin(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+tsize/3))/2+H/2-tsize/4+2
+                     -elev*16,    //x,y on canvas
           33,33)}
       else if ((cam.spin*2)%2==1) {
         tsize = 23
         xsize = 33
         zsize = 15
+        canx =    cos(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2)+xshift-
+        sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+zsize/2)+W/2-tsize
+        cany = (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+zsize/2)+zshift+
+                          sin(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3
+                     -elev*16
         ctx.drawImage(
           isotile,
           0,0,    //x,y on tiles
           33,33,  //w,h on tiles
-                     cos(cam.spin*pi/2)*((npos%this.w)*tsize-(tsize*marble.x/rgrid)+xsize/2)+xshift-
-           sin(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-(tsize*marble.z/rgrid)+zsize/2)+W/2-tsize, 
-          (cos(cam.spin*pi/2)*(Math.floor(npos/this.w)*tsize-(tsize*marble.z/rgrid)+zsize/2)+zshift+
-                     sin(cam.spin*pi/2)*((npos%this.w)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3,    //x,y on canvas
-          33,33)}
-      if (n==goal.h+goal.v*map.w) {goal.render()}
+                     canx, cany
+          ,    //x,y on canvas
+          33,33)
+       // ctx.font = "8pt courier";
+        //ctx.fillStyle = '#ffffff'
+        //ctx.fillText(npos,canx+7,cany+8)
+        //ctx.fillText(n,canx+7,cany+16)
       }
-    
-    //if (this.mtx[n]) {ctx.fillRect(
-    //                  cos(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)-
-    //                  sin(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.z+tsize/2)+(W-tsize)/2,
-    //                  cos(cam.spin*pi/2)*(Math.floor(n/this.w)*tsize-marble.z+tsize/2)+
-    //                  sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2)+(H-tsize)/2,  tsize,tsize)}
-    }
-    //if (Math.floor(marble.x/rgrid)%this.w+
-    //    Math.floor(marble.z/rgrid)*this.w ==n&&marble.y<0) {
-      
-    //}
+      if (n==goal.h+goal.v*map.w) {goal.render()}}}
     goal.render()
       if (marble.y>=-0.1) {marble.render2()}
   }
@@ -375,8 +388,6 @@ Goal.prototype.render = function() {
       zshift = 4}
   } else {npos = n}
   
-  //if (1) {
-    //ctx.fillRect(0,0,32,32)
   if ((cam.spin*2)%2==0) {
     tsize = 24
     xsize = 24
@@ -416,7 +427,7 @@ function Marble(x,z,inputs) {
   this.z = z//map.tsize*map.h-12
   this.xsp = 0
   this.zsp = 0
-  this.y = 10
+  this.y = 30
   this.ysp = 0
   this.strike = 0
   this.health = 100}
@@ -509,11 +520,12 @@ function reload() {
   else if (level == 5) {level_5()}
   else if (level == 6) {level_6()}
   else if (level == 7) {level_7()}
+  else {level_random_small()}
 }
 
 reset()
 var t=0
-var level = 0
+var level = -1
 var controller = new Controller()
 var renderlist = []
 var render_mode = 1
@@ -523,7 +535,7 @@ var marble = new Marble(32,32,controller)
 var objects = []
 objects.push(marble)
 
-level_0()
+level_random_small()
 
 function execute () {
   function loop () {
