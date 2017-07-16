@@ -431,7 +431,7 @@ Marble.prototype.update = function () {
   this.xsp = this.xsp/1.1
   this.zsp = this.zsp/1.1
 
-  this.xc=0; this.yc=0; this.zc=0//collision correction 
+  this.xc=0; this.yc=0; this.zc=0//collision correction // likely replace this method with something vector based
   if (map.check(this.x+this.xsp,this.y,this.z)) {
     this.xc=this.xsp
     while (map.check(this.x+this.xc,this.y,this.z)) {
