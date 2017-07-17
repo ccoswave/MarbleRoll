@@ -361,13 +361,13 @@ Map.prototype.render2 = function () {
 
 
 
-      if (n==goal.h+goal.v*map.w) {goal.render()}}
+      }
 
     }
 
 
 
-    
+      goal.render()
       marble.render2()
 
 
@@ -377,7 +377,7 @@ Map.prototype.render2 = function () {
 
 
 
-    goal.render()
+
      // if (marble.y>=-0.1) {marble.render2()}
   }
 
