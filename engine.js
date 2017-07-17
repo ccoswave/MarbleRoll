@@ -309,20 +309,20 @@ Map.prototype.render2 = function () {
           partile,
           0,0,    //x,y on tiles
           33,33,  //w,h on tiles
-                     cos(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+tsize/2)+xshift-
-           sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+tsize/2)+W/2-tsize/2-1,
-          (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+tsize/3)+zshift+
-                     sin(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+tsize/3))/2+H/2-tsize/4+2
+                     cos(cam.spin*pi/2)*(((npos%this.w)%this.w)*tsize-(tsize*marble.x/rgrid)+tsize/2)+xshift-
+           sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%this.h)*tsize-(tsize*marble.z/rgrid)+tsize/2)+W/2-tsize/2-1,
+          (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%this.h)*tsize-(tsize*marble.z/rgrid)+tsize/3)+zshift+
+                     sin(cam.spin*pi/2)*(((npos%this.w)%this.w)*tsize-(tsize*marble.x/rgrid)+tsize/3))/2+H/2-tsize/4+2
                      -elev*16,    //x,y on canvas
           33,33)}
       else if ((cam.spin*2)%2==1) {
         tsize = 23
         xsize = 33
         zsize = 15
-        canx =    cos(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2)+xshift-
-        sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+zsize/2)+W/2-tsize
-        cany = (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%(this.h))*tsize-(tsize*marble.z/rgrid)+zsize/2)+zshift+
-                          sin(cam.spin*pi/2)*(((npos%this.w)%this.h)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3
+        canx =            cos(cam.spin*pi/2)*(((npos%this.w)%this.w)*tsize-(tsize*marble.x/rgrid)+xsize/2)+xshift-
+                sin(cam.spin*pi/2)*((Math.floor(npos/this.w)%this.h)*tsize-(tsize*marble.z/rgrid)+zsize/2)+W/2-tsize
+        cany = (cos(cam.spin*pi/2)*((Math.floor(npos/this.w)%this.h)*tsize-(tsize*marble.z/rgrid)+zsize/2)+zshift+
+                          sin(cam.spin*pi/2)*(((npos%this.w)%this.w)*tsize-(tsize*marble.x/rgrid)+xsize/2))/2+H/2-tsize/3
                      -elev*16
         ctx.drawImage(
           isotile,
@@ -488,7 +488,7 @@ Marble.prototype.render2 = function () {
     balltile,
     0,0,    //x,y on tiles
     17,17,  //w,h on tiles
-    W/2-9,H/2-14-(this.y*16)/64+24,    //x,y on canvas
+    W/2-9,H/2-14-(this.y*16)/64+16,    //x,y on canvas
     17,17)
   ctx.fillStyle = '#000000'}
   //ctx.fillRect(W/2-2,H/2-2-this.y,4,4)}
@@ -525,7 +525,7 @@ function reload() {
 
 reset()
 var t=0
-var level = -1
+var level = 0
 var controller = new Controller()
 var renderlist = []
 var render_mode = 1
@@ -535,7 +535,7 @@ var marble = new Marble(32,32,controller)
 var objects = []
 objects.push(marble)
 
-level_random_small()
+level_0()
 
 function execute () {
   function loop () {
