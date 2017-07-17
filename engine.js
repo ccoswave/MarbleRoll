@@ -11,7 +11,7 @@ function level_random_large() {
 function level_random_small() {
   console.log('reset')
   cam = new Camera()
-  map = new Map(12,12,4)
+  map = new Map(6,8,2)
   objects = []  
   marble = new Marble(32,32,new Controller())  
   goal = new Goal(11,3) 
@@ -261,17 +261,17 @@ Map.prototype.render = function () {
                       sin(cam.spin*pi/2)*((n%this.w)*tsize-marble.x+tsize/2))/2+(H-tsize/3)/2,  tsize,tsize)}}}
 Map.prototype.render2 = function () {
   rgrid = this.rgrid
+   
   for (n=0;n<this.w*this.h*this.d;n++) {
     ctx.fillStyle = '#222288'
     ctx.strokeStyle = '#000000'
     z = floor(n/this.w)*this.w
     flsq = this.h*this.w
     elev = floor(n/(flsq))
-      
     xshift = 0
     zshift = 0
-    function convert (num) {
-      return num }
+    
+
     if (cam.spin<=1) {
       elev = floor(n/flsq)
       npos = n
@@ -298,7 +298,7 @@ Map.prototype.render2 = function () {
       if (cam.spin%1==0.5) {
         xshift = 6;zshift = 4}
     } else {npos = n}
-    npos = convert(npos)
+
     if (this.mtx[npos]) {
       if ((cam.spin*2)%2==0) {
         tsize = 24
@@ -331,14 +331,33 @@ Map.prototype.render2 = function () {
                      canx, cany
           ,    //x,y on canvas
           33,33)
-       // ctx.font = "8pt courier";
-        //ctx.fillStyle = '#ffffff'
-        //ctx.fillText(npos,canx+7,cany+8)
-        //ctx.fillText(n,canx+7,cany+16)
+          //ctx.font = "8pt courier";
+          //ctx.fillStyle = '#ffffff'
+          //ctx.fillText(n,canx+12,cany+11)
       }
-      if (n==goal.h+goal.v*map.w) {goal.render()}}}
+
+
+
+
+
+      if (n==goal.h+goal.v*map.w) {goal.render()}}
+
+    }
+
+
+
+    
+      marble.render2()
+
+
+
+
+
+
+
+
     goal.render()
-      if (marble.y>=-0.1) {marble.render2()}
+     // if (marble.y>=-0.1) {marble.render2()}
   }
 
 
@@ -525,7 +544,7 @@ function reload() {
 
 reset()
 var t=0
-var level = 0
+var level = -1
 var controller = new Controller()
 var renderlist = []
 var render_mode = 1
@@ -535,7 +554,7 @@ var marble = new Marble(32,32,controller)
 var objects = []
 objects.push(marble)
 
-level_0()
+level_random_small()
 
 function execute () {
   function loop () {
