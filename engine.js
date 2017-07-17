@@ -240,8 +240,8 @@ function Map (w,h,d) {
   for (n=0;n<this.w*this.h*this.d;n++) {
     this.mtx.push(rr())}}
 Map.prototype.check = function (x,y,z) {
-  if (x<=this.w*this.rgrid&&z<=this.h*this.rgrid&&x>=0&&z>=0) {
-    if (this.mtx[Math.floor(x/this.rgrid)+Math.floor(z/this.rgrid)*this.w]&&y<0) {return true} else {return false}}
+  if (x<=this.w*this.rgrid&&z<=this.h*this.rgrid&&y<=this.d*this.rgrid&&x>=0&&z>=0&&y>=0) {
+    if (this.mtx[Math.floor(x/this.rgrid)+Math.floor(z/this.rgrid)*this.w+Math.floor(y/this.rgrid)*this.w*this.h]) {return true} else {return false}}
   else {
     return false}}
 Map.prototype.render = function () {
@@ -427,7 +427,7 @@ function Marble(x,z,inputs) {
   this.z = z//map.tsize*map.h-12
   this.xsp = 0
   this.zsp = 0
-  this.y = 30
+  this.y = 256+64
   this.ysp = 0
   this.strike = 0
   this.health = 100}
@@ -437,9 +437,9 @@ Marble.prototype.update = function () {
   this.zsp += (cos(cam.spin*pi/2)*this.ctrl.move[1] - sin(cam.spin*pi/2)*this.ctrl.move[0])*1.5
   
   if (map.check(this.x,this.y-1,this.z)&&!map.check(this.x,this.y,this.z)) {
-    if (this.ctrl.jump) {this.ysp = 6}} // jump
+    if (this.ctrl.jump) {this.ysp = 24}} // jump
   else { // fall
-    this.ysp--} 
+    this.ysp-=4} 
   this.xsp = this.xsp/1.1
   this.zsp = this.zsp/1.1
 
@@ -488,7 +488,7 @@ Marble.prototype.render2 = function () {
     balltile,
     0,0,    //x,y on tiles
     17,17,  //w,h on tiles
-    W/2-9,H/2-14-this.y,    //x,y on canvas
+    W/2-9,H/2-14-(this.y*16)/64+24,    //x,y on canvas
     17,17)
   ctx.fillStyle = '#000000'}
   //ctx.fillRect(W/2-2,H/2-2-this.y,4,4)}
