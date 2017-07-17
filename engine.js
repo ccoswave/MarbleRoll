@@ -109,7 +109,7 @@ function level_3() {
   goal = new Goal(9,9)  
   objects.push(marble)}
 
-function level_7() {
+function level_4() {
   mtx = [1,1,0,0,0,0,0,0,
          1,1,1,1,1,1,0,0,
          0,0,0,0,0,0,0,0,
@@ -127,10 +127,31 @@ function level_7() {
   map.mtx = mtx
   objects = []  
   marble = new Marble(64+32,64+32,new Controller())  
+  goal = new Goal(2,4)  
   objects.push(marble)
 }
 
-
+function level_5() {
+  mtx = [1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         0,0,0,0,0,0,0,0,1,1,
+         0,0,0,0,0,0,0,0,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,0,0,0,0,0,0,0,0,
+         1,1,0,0,0,0,0,0,0,0,
+         1,1,1,1,1,1,1,1,1,1,
+         1,1,1,1,1,1,1,1,1,1,
+         0,0,0,0,0,0,0,1,1,1]
+  console.log('reset')
+  cam = new Camera()
+  cam.spin = 2.5
+  map = new Map(10,11,1)
+  map.mtx = mtx
+  objects = []  
+  marble = new Marble(64,64,new Controller())
+  goal = new Goal(8,9)  
+  objects.push(marble)}
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -544,7 +565,7 @@ function reload() {
 
 reset()
 var t=0
-var level = -1
+var level = 0
 var controller = new Controller()
 var renderlist = []
 var render_mode = 1
@@ -554,7 +575,7 @@ var marble = new Marble(32,32,controller)
 var objects = []
 objects.push(marble)
 
-level_random_small()
+level_0()
 
 function execute () {
   function loop () {
