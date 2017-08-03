@@ -418,6 +418,8 @@ function rr() {
   if (rn>1) {rn=1}
   return rn}
 
+
+
 function Map (w,h,d) {
   this.x = 0
   this.y = 0
@@ -741,6 +743,8 @@ var map = new Map(8,8,1)
 var cam = new Camera()
 var marble = new Marble(32,32,controller)
 var objects = []
+//var world = new World()
+
 objects.push(marble)
 
 level_0()
@@ -777,19 +781,9 @@ function execute () {
       map.render()
       if (marble.y>=0) {marble.render()}}
     else if (render_mode==1) {
-      //cam.spin = 0.5
-
-      map.render2()
-      
-    
-      //marble.render2()
-      //map.render()
-      //ctx.drawImage(
-      //  tile,
-      //  0,0,    //x,y on tiles
-      //  33,33,  //w,h on tiles
-      //  16,16,    //x,y on canvas
-      //  33,33)
+      map.render2()}
+    else if (render_mode==2) {
+      world.render()
     }
     //for (o=0;o<objects.length;o++) {
       //objects[o].render()}
@@ -813,3 +807,35 @@ function execute () {
 }
 execute()
         
+
+
+
+
+function World() {
+  this.cam = null
+  this.blocks = []
+  this.objects = []}
+World.prototype.compose = function () {
+  panellib = []
+  for (n=0;n<1;n++) {
+    //index_length = 2 //dummy var
+    //for (i=0;i<index_length;i++) {
+    //  panel_image
+    //  panel = {img: panel_image}
+    //}
+
+    
+    //panellib.push(panels)
+  }}
+World.prototype.render = function () {
+  //sort
+  panels = []
+  //render
+  for (p=0;p<panels.length;p++) {
+    panel = panels[p]
+    ctx.drawImage(
+      panel.img,
+      0,0,    //x,y on tiles
+      panel.w,panel.h,  //w,h on tiles
+      W/2+panel.x-this.cam.x,H/2+panel.y-this.cam.y,    //x,y on canvas
+      panel.w,panel.h)}}
